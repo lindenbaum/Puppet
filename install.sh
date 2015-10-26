@@ -132,19 +132,3 @@ systemctl start puppetmaster.service
 puppetdb ssl-setup
 puppet resource service puppetdb ensure=running enable=true
 reboot
-
-
-
-: '
-Puppet Agent
-Installation des Agents. 
-
-Auf dem Agent (Note, Site) bedarf es im normalen Fall keiner Konfiguration.
-Der Puppet Agent wird einmalig mit "puppet agent --test --waitforcert 10" initialisiert.
-
-Dieser muss dann nur noch als Daemon aktiviert werden. "puppet agent --enable"
-'
-yum install -y puppet.noarch
-puppet resource package puppet ensure=latest
-
-chown -R puppet:puppet $(puppet config print confdir) /var/lib/puppet
