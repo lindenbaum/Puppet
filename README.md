@@ -13,7 +13,9 @@ Install Puppetmaster on yum-based hosts.
 ##Installation des Agents. 
 
 `yum install -y puppet.noarch`
+
 `puppet resource package puppet ensure=latest`
+
 `chown -R puppet:puppet $(puppet config print confdir) /var/lib/puppet`
 
 Auf dem Agent (Note, Site) bedarf es im normalen Fall keiner Konfiguration.
