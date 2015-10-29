@@ -1,15 +1,10 @@
-#!/bin/bash
+#!/bin/bash -eu
 
-hostname="$1"
+hostname=${1?"Usage: $0 <hostname>"}
 
-if [ -z $1 ]; then
-  echo "Usage: $0 <hostname>"
-  exit 1;
-else
-  cat > /etc/hostname <<EOF
+cat > /etc/hostname <<EOF
 $hostname
 EOF
-fi
 
 yum -y update
 
@@ -105,7 +100,7 @@ chown -R puppet:puppet $(puppet config print confdir) /var/lib/puppet
 
 # PostgreSQL Setup
 mkdir /etc/puppet/database
-chown postgres.postgres /etc/puppet/database
+chown postgres:postgres /etc/puppet/database
 
 cat > /etc/systemd/system/postgresql.service <<EOF
 .include /lib/systemd/system/postgresql.service
