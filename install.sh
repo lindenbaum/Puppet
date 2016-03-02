@@ -32,11 +32,11 @@ cat > /etc/puppet/puppet.conf <<EOF
 [main]
     logdir = /var/log/puppet
     rundir = /var/run/puppet
-    ssldir = $vardir/ssl
+    ssldir = \$vardir/ssl
     dns_alt_names = puppet,puppet.lbaum.eu,puppet.tec.lbaum.eu
 [agent]
-    classfile = $vardir/classes.txt
-    localconfig = $vardir/localconfig
+    classfile = \$vardir/classes.txt
+    localconfig = \$vardir/localconfig
 [master]
     autosign = true
     storeconfigs = true
@@ -126,4 +126,4 @@ systemctl start puppetmaster.service
 
 puppetdb ssl-setup
 puppet resource service puppetdb ensure=running enable=true
-reboot
+
