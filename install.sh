@@ -91,8 +91,19 @@ port = 8082
 EOF
 
 cat > /etc/puppet/manifests/site.pp <<EOF
+\$timestamp = generate('/bin/date', '+%d.%m.%Y %H:%M:%S')
 file { "/tmp/puppet":
-    ensure => "present",
+  ensure => "present",
+  content => "\$timestamp",
+}
+
+service { "puppet":
+  enable => "true",
+  ensure => "running",
+}
+
+Package {
+  allow_virtual => true,
 }
 EOF
 
