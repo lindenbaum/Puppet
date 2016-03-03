@@ -33,7 +33,7 @@ cat > /etc/puppet/puppet.conf <<EOF
     logdir = /var/log/puppet
     rundir = /var/run/puppet
     ssldir = \$vardir/ssl
-    dns_alt_names = puppet,puppet.lbaum.eu,puppet.tec.lbaum.eu
+    dns_alt_names = puppet,\$hostname
 [agent]
     classfile = \$vardir/classes.txt
     localconfig = \$vardir/localconfig
