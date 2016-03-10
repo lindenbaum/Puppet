@@ -91,7 +91,7 @@ port = 8082
 EOF
 
 cat > /etc/puppet/manifests/site.pp <<EOF
-\$timestamp = generate('/bin/date', '+%d.%m.%Y %H:%M:%S')
+\$timestamp = generate('/bin/date', '+%s')
 file { "/tmp/puppet":
   ensure => "present",
   content => "\$timestamp",
@@ -120,11 +120,11 @@ cat > /etc/systemd/system/postgresql.service <<EOF
 Environment=PGDATA=/etc/puppet/database
 EOF
 
-systemctl enable postgresql.service 
+systemctl enable postgresql.service
 
 su postgres -c "initdb -D /etc/puppet/database/"
 sleep 5
-systemctl start postgresql.service 
+systemctl start postgresql.service
 sleep 5
 
 su postgres -c "createuser -DRS puppetdb"
@@ -137,4 +137,3 @@ systemctl start puppetmaster.service
 
 puppetdb ssl-setup
 puppet resource service puppetdb ensure=running enable=true
-
