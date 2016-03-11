@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 
-hostname=${1?"Usage: $0 <hostname>"}
+hostname=${1?"Usage: $0 <hostname> <puppet-dir>"}
+vardir=${2?"Usage: $0 <hostname> <puppet-dir>"}
 
 cat > /etc/hostname <<EOF
 $hostname
@@ -30,17 +31,18 @@ puppet resource package puppetdb-terminus ensure=latest
 # Puppet Setup
 cat > /etc/puppet/puppet.conf <<EOF
 [main]
-    logdir = /var/log/puppet
-    rundir = /var/run/puppet
-    ssldir = \$vardir/ssl
-    dns_alt_names = puppet,$hostname
+  vardir = $vardir
+  logdir = /var/log/puppet
+  rundir = /var/run/puppet
+  ssldir = \$vardir/ssl
+  dns_alt_names = puppet,$hostname
 [agent]
-    classfile = \$vardir/classes.txt
-    localconfig = \$vardir/localconfig
+  classfile = \$vardir/classes.txt
+  localconfig = \$vardir/localconfig
 [master]
-    autosign = true
-    storeconfigs = true
-    storeconfigs_backend = puppetdb
+  autosign = true
+  storeconfigs = true
+  storeconfigs_backend = puppetdb
 EOF
 
 cat > /etc/puppet/routes.yaml <<EOF
@@ -54,40 +56,40 @@ EOF
 # PuppetDB Setup
 cat > /etc/puppet/puppetdb.conf <<EOF
 [main]
-    server = puppet
-    port = 8081
+  server = puppet
+  port = 8081
 EOF
 
 cat > /etc/puppetdb/conf.d/config.ini <<EOF
 [global]
-vardir = /var/lib/puppetdb
-logging-config = /etc/puppetdb/logback.xml
+  vardir = /var/lib/puppetdb
+  logging-config = /etc/puppetdb/logback.xml
 [command-processing]
 EOF
 
 cat > /etc/puppetdb/conf.d/database.ini <<EOF
 [database]
-classname = org.postgresql.Driver
-subprotocol = postgresql
-subname = //localhost:5432/puppetdb
-username = puppetdb
-log-slow-statements = 10
+  classname = org.postgresql.Driver
+  subprotocol = postgresql
+  subname = //localhost:5432/puppetdb
+  username = puppetdb
+  log-slow-statements = 10
 EOF
 
 cat > /etc/puppetdb/conf.d/jetty.ini <<EOF
 [jetty]
-ssl-host = 0.0.0.0
-ssl-port = 8081
-ssl-key = /etc/puppetdb/ssl/private.pem
-ssl-cert = /etc/puppetdb/ssl/public.pem
-ssl-ca-cert = /etc/puppetdb/ssl/ca.pem
+  ssl-host = 0.0.0.0
+  ssl-port = 8081
+  ssl-key = /etc/puppetdb/ssl/private.pem
+  ssl-cert = /etc/puppetdb/ssl/public.pem
+  ssl-ca-cert = /etc/puppetdb/ssl/ca.pem
 EOF
 
 cat > /etc/puppetdb/conf.d/repl.ini <<EOF
 [repl]
-enabled = false
-type = nrepl
-port = 8082
+  enabled = false
+  type = nrepl
+  port = 8082
 EOF
 
 cat > /etc/puppet/manifests/site.pp <<EOF
